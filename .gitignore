@@ -1,0 +1,13 @@
+# Customer data — never commit
+output_files/
+dormant_kids_offer_*.csv
+*.csv
+
+# Automation state, logs, executed notebooks, cached IDs
+.automation/
+
+# Notebook checkpoints / env
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+.DS_Store

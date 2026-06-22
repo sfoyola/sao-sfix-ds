@@ -9,7 +9,7 @@
     <key>ProgramArguments</key>
     <array>
         <string>/Users/sergio.oyola/.pyenv/shims/python</string>
-        <string>/Users/sergio.oyola/Desktop/StitchFix/kids_dormant_offer/run_dormant_kids.py</string>
+        <string>/Users/sergio.oyola/Desktop/StitchFix/sao-sfix-ds/automation_kids_dormant_offer/run_dormant_kids.py</string>
     </array>
 
     <!-- Fires every day at 12:00 local. The script itself gates to once/month.
@@ -42,8 +42,8 @@
     <false/>
 
     <key>StandardOutPath</key>
-    <string>/Users/sergio.oyola/Desktop/StitchFix/kids_dormant_offer/.automation/logs/launchd.out.log</string>
+    <string>/Users/sergio.oyola/Desktop/StitchFix/sao-sfix-ds/automation_kids_dormant_offer/.automation/logs/launchd.out.log</string>
     <key>StandardErrorPath</key>
-    <string>/Users/sergio.oyola/Desktop/StitchFix/kids_dormant_offer/.automation/logs/launchd.err.log</string>
+    <string>/Users/sergio.oyola/Desktop/StitchFix/sao-sfix-ds/automation_kids_dormant_offer/.automation/logs/launchd.err.log</string>
 </dict>
 </plist>

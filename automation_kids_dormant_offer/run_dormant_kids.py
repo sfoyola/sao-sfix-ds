@@ -34,8 +34,8 @@ from datetime import date, datetime
 # ----------------------------------------------------------------------------
 # Config — edit these if anything moves.
 # ----------------------------------------------------------------------------
-PROJECT_DIR   = Path("/Users/sergio.oyola/Desktop/StitchFix/kids_dormant_offer")
-SLACK_CHANNEL = "#kids-dormant-offer"          # name (resolved) or a channel ID like C0123ABCD
+PROJECT_DIR   = Path("/Users/sergio.oyola/Desktop/StitchFix/sao-sfix-ds/automation_kids_dormant_offer")
+SLACK_CHANNEL = "C0BBY6XA09X"                  # #kids-dormant-offer — ID avoids conversations.list lookup
 AWS_PROFILE   = "Algorithms/DataScientist"
 AWS_REGION    = "us-east-1"
 KEYCHAIN_SERVICE = "SLACK_KDO_BOT_TOKEN"        # macOS Keychain service name holding the bot token
