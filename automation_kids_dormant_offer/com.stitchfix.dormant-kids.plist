@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.stitchfix.dormant-kids</string>
+
+    <!-- Run the runner with the pyenv python that has the StitchFix libs. -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/sergio.oyola/.pyenv/shims/python</string>
+        <string>/Users/sergio.oyola/Desktop/StitchFix/kids_dormant_offer/run_dormant_kids.py</string>
+    </array>
+
+    <!-- Fires every day at 12:00 local. The script itself gates to once/month.
+         If the Mac is asleep/off at 12:00, launchd runs it on next wake/boot,
+         and the next day's fire retries if that attempt didn't succeed. -->
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>12</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+
+    <!-- launchd does NOT source ~/.zshrc, so set the environment explicitly. -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>HOME</key>
+        <string>/Users/sergio.oyola</string>
+        <key>PATH</key>
+        <string>/Users/sergio.oyola/.pyenv/shims:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+        <key>AWS_PROFILE</key>
+        <string>Algorithms/DataScientist</string>
+        <key>AWS_REGION</key>
+        <string>us-east-1</string>
+        <key>AWS_DEFAULT_REGION</key>
+        <string>us-east-1</string>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/sergio.oyola/Desktop/StitchFix/kids_dormant_offer/.automation/logs/launchd.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/sergio.oyola/Desktop/StitchFix/kids_dormant_offer/.automation/logs/launchd.err.log</string>
+</dict>
+</plist>
