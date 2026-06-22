@@ -1,5 +1,7 @@
+# Generic ignores shared across all projects in this repo.
+# Project-specific paths live in each project's own .gitignore.
+
 # Data
-output_files/
 *.csv
 *.xlsx
 *.parquet
@@ -20,9 +22,6 @@ __pycache__/
 
 # Jupyter notebook checkpoints
 .ipynb_checkpoints/
-
-# Automation state, logs, executed notebooks, cached IDs
-.automation/
 
 # OS / IDE files
 .DS_Store

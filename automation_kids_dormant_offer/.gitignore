@@ -1,0 +1,5 @@
+# Generated CSV batches uploaded to Slack (client data)
+output_files/
+
+# Automation state: logs, month markers, executed notebook copies, cached channel ID
+.automation/
