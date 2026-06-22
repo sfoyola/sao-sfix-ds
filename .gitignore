@@ -1,13 +1,31 @@
-# Customer data — never commit
+# Data
 output_files/
-dormant_kids_offer_*.csv
 *.csv
+*.xlsx
+*.parquet
+
+# Secrets / credentials
+.env
+.env.*
+*.pem
+credentials*
+secrets*
+
+# Python env & caches
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
 
 # Automation state, logs, executed notebooks, cached IDs
 .automation/
 
-# Notebook checkpoints / env
-.ipynb_checkpoints/
-__pycache__/
-*.pyc
+# OS / IDE files
 .DS_Store
+Thumbs.db
+.idea/
+.vscode/
