@@ -39,6 +39,7 @@ SLACK_CHANNEL = "C0BBY6XA09X"                  # #kids-dormant-offer — ID avoi
 AWS_PROFILE   = "Algorithms/DataScientist"
 AWS_REGION    = "us-east-1"
 KEYCHAIN_SERVICE = "SLACK_KDO_BOT_TOKEN"        # macOS Keychain service name holding the bot token
+STITCHFIX_USER_EMAIL = "sergio.oyola@stitchfix.com"  # data-warehouse caller identity (launchd lacks the ~/.zshrc export)
 
 # Message posted alongside the CSV upload. Edit freely; a metadata footer
 # (as_of / row count / filename) is appended automatically.
@@ -66,6 +67,9 @@ os.environ.setdefault("HOME", "/Users/sergio.oyola")
 os.environ["AWS_PROFILE"] = AWS_PROFILE
 os.environ["AWS_REGION"] = AWS_REGION
 os.environ["AWS_DEFAULT_REGION"] = AWS_REGION
+# launchd doesn't source ~/.zshrc, so the StitchFix data lib's identity var is missing;
+# setdefault so an interactive shell's own export still wins when running manually.
+os.environ.setdefault("STITCHFIX_USER_EMAIL", STITCHFIX_USER_EMAIL)
 # Force use of credential_process (SSO) rather than any stale static keys.
 for v in ("AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_SESSION_TOKEN"):
     os.environ.pop(v, None)
