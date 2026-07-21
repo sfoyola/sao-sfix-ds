@@ -28,3 +28,6 @@ __pycache__/
 Thumbs.db
 .idea/
 .vscode/
+
+# Claude Code local tooling (skills, settings) — not shared remotely
+.claude/
