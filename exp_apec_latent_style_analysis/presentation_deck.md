@@ -1,9 +1,16 @@
-# APEC Personalization: Reactivation Impact for Long-Dormant Clients
+# APEC — Reactivation Impact for Long-Dormant Clients
 
 - Presenter: Sergio Oyola
-- Presentation date: [ADD DATE]
-- Core question: does APEC (personalized email/push content) meaningfully improve reactivation among clients who haven't checked out in 3+ years?
+- Presentation date: July 21, 2026
+- Core question: does personalized email content meaningfully improve reactivation among clients who haven't checked out in 3+ years?
 - Based on a sizing analysis for a potential live test, plus a look at actual send history for this population
+
+# Executive Summary
+
+- No clear case to run a full randomized test: APEC personalization roughly matches non-APEC marketing content, with no evidence it's helping the long-dormant population.
+- Population: about 9.8M clients dormant 3+ years — ample for any test design; population size isn't the constraint.
+- The read (17 months): APEC (0.19%) is below non-APEC (0.31%), below DSE (0.32%), and far below the transactional-email artifact (7.35%, which is excluded from the comparison) — and the trend is degrading, not improving, with APEC's rate 2.1x lower in the final 7 months than the first 10.
+- The cost of proof: baseline reactivation is only ~0.09%/month, so even a +15% lift would need ~1.66M clients and ~6 weeks, while a more realistic +5% lift would need ~14.3M clients and ~48 weeks — reinforcing that there's no clear case to run a full randomized experiment right now.
 
 # Data Behind This Analysis
 
@@ -51,7 +58,7 @@ INNER JOIN curated.client_reactivation_demand_events e
 WHERE e.demand_type IN ('fix', 'direct_buy')
 ```
 
-# Sizing a Potential Live Experiment
+# Sizing a Hypothetical Live Experiment
 
 - Eligible population: clients with no checkout in more than 1,095 days (3+ years) — about **9,805,722 clients**, more than enough to support any test design; population size is not the constraint.
 - Baseline reactivation rate for this population, restricted to genuine marketing sends (transactional/account-service email is excluded — see the next slide), is just **0.09%** in a given month — genuine marketing-driven reactivation is very rare, which drives up the sample size and time needed to detect a real effect.
@@ -65,10 +72,23 @@ WHERE e.demand_type IN ('fix', 'direct_buy')
 | +10% | 1,825,481 | 3,650,962 | 86 days (12.3 weeks) |
 | +15% | 830,623 | 1,661,246 | 39 days (5.6 weeks) |
 
-# APEC vs. Non-APEC Sends: The Headline Comparison
+# Why Transactional Email Is Excluded From the Marketing Comparison
+
+- Transactional campaigns (password resets, order/Fix status confirmations) convert at **7.35%** — a data artifact, not a campaign effect — but only because the client is already logging in or checking an order, not because of marketing content.
+- With transactional email set aside, APEC (0.19%) sits modestly below all genuine non-APEC campaigns (0.31%).
+
+Reactivation rate: transactional email vs. genuine marketing (chart-ready data):
+
+| Category | Reactivation rate |
+|---|---|
+| Transactional email | 7.3452% |
+| Non-APEC | 0.31% |
+| APEC | 0.1886% |
+
+# APEC vs. Non-APEC Sends
 
 - To get a reliable read without waiting months for a live test, this analysis looks at **516 days of actual send history (~17 months, January 2025 - May 2026)** for the same 3+-year-dormant population sized above — longer than the minimum duration for the +5%, +10%, or +15% designs above (335, 86, and 39 days respectively), though shorter than the +3% design's 920-day requirement.
-- A client counts as **reactivated** by a send only if they clicked through to a tracked session tied to that specific send, and that session led to a real purchase or styling request within 7 days — a strict, click-through-confirmed standard. Transactional/account-service email (e.g. password resets, order status confirmations) is excluded from this comparison entirely, since a client only receives one because they're already returning on their own, not because of a marketing choice (see the next slide for why this matters).
+- A client counts as **reactivated** by a send only if they clicked through to a tracked session tied to that specific send, and that session led to a real purchase or styling request within 7 days — a strict, click-through-confirmed standard. The TRANSACTIONAL category is excluded from this comparison since clients act on it because they're already returning, not because of marketing.
 - APEC (personalized) sends reactivated **0.19%** of the 1,322,312 clients who received them; every other qualifying marketing send combined reactivated **0.31%** of the 4,311,084 clients who received them — roughly **1.6x higher** for non-personalized sends.
 - That gap (0.12 percentage points, 95% CI 0.11-0.13 points) is still statistically significant (p < 0.0001), though far smaller than a surface-level comparison would suggest — and it holds up in 15 of the 17 months individually, not just pooled (APEC edges ahead in February and June 2025).
 
@@ -100,21 +120,6 @@ Monthly reactivation rate, APEC vs. non-APEC (chart-ready data):
 | 2026-03 | 0.0137% | 0.0879% |
 | 2026-04 | 0.0148% | 0.0702% |
 | 2026-05 | 0.0123% | 0.0663% |
-
-# Why Transactional Email Is Excluded From the Marketing Comparison
-
-- Account-service email (any campaign name containing "transactional" — password resets, order/Fix status confirmations, and similar) converts at **7.35%** — far above every genuine marketing category — but only because a client receives one by already trying to log back in or checking an existing order, not because the content persuaded them to return.
-- Within transactional email, two password-reset campaigns alone account for roughly 78% of its reactivations despite representing only a small share of its volume — a sign that a client's own return, not campaign content, is driving the credit, which is why this category is kept separate from the APEC-vs-non-APEC comparison and broken out on its own in the full category breakdown instead.
-- Compared only against genuine marketing categories, APEC's rate (0.19%) is close to OTHER's (0.20%) and modestly below DSE's (0.32%).
-- Discounting isn't a hidden driver of the remaining gap either: explicit win-back/discount offers (waived-styling-fee and 30%-off promos) convert at just 0.16%, close to APEC's rate.
-
-Send population, split by whether the campaign name contains "transactional" (chart-ready data):
-
-| Sub-group | Clients sent | Reactivated | Reactivation rate |
-|---|---|---|---|
-| Transactional/account-service email | 595,900 | 43,770 | 7.3452% |
-| Marketing/content email (the OTHER category, excluding transactional sends) | 4,297,628 | 8,588 | 0.1998% |
-| For reference: APEC (all sends) | 1,322,312 | 2,494 | 0.1886% |
 
 # How Other Campaign Types Compare
 
@@ -153,12 +158,12 @@ Reactivation rate by category, full window (chart-ready data):
 
 # Category Performance Over Time
 
-- **TRANSACTIONAL** sits far above every other category in every single month (roughly 1%-10%) — a confirmation of the earlier point that it's a data artifact, not a genuine campaign effect, and shouldn't be read as a performance benchmark for anything else on this chart.
-- Among the genuine marketing categories, the month-to-month ranking is noisy rather than one-sided: **APEC** actually leads all of them in 2 of the 17 months (May and June 2025) and ranks 2nd in 3 more (January, February, September 2025) — it is not uniformly the worst performer.
-- APEC's ranking drops sharply starting **November 2025**, though — it finishes last among the marketing categories in 6 of the final 7 months. This coincides with two things moving at once: APEC's own rate declining for real (averaging roughly 0.025% in the first ten months of the window vs. roughly 0.011% in the final seven), and TFY's post-November-2025 volume-drop-driven rate spike (see below) pulling ahead of it.
-- **Fresh Picks** and **New For You** are each a single one-time send, so they contribute one data point each, not a trend; the dormant browse-abandon trigger's thin monthly volume (well under 9,500 clients in any month) makes its early wins (it briefly led in January and February 2025) more a small-sample fluke than a stable signal.
+- Among the genuine marketing categories, the month-to-month ranking is noisy: **APEC** actually leads all of them in 2 of the 17 months (May and June 2025).
+- APEC's rank drops sharply starting **November 2025** — averaging roughly 0.025% in the first ten months of the window vs. roughly 0.011% in the final seven.
+- **TFY** shows a low-volume-driven rate spike starting November 2025.
+- **Fresh Picks** and **New For You** are each a single one-off data point with poor performance; the **dormant browse-abandon** trigger's monthly volume leads from January to March 2025, then drops to zero and disappears for several months, spikes again in August 2025, and decreases and stabilizes for the remainder of the window.
 
-Monthly reactivation rate by category (chart-ready data; "—" = no sends that category/month):
+Chart excludes TRANSACTIONAL (7.35%) to keep marketing categories readable. Monthly reactivation rate by category (chart-ready data; "—" = no sends that category/month):
 
 | Month | OTHER | TRANSACTIONAL | DSE | APEC | TFY | Dormant browse-abandon | New For You | Fresh Picks |
 |---|---|---|---|---|---|---|---|---|
@@ -180,12 +185,12 @@ Monthly reactivation rate by category (chart-ready data; "—" = no sends that c
 | 2026-04 | 0.0502% | 7.5639% | 0.0252% | 0.0148% | 0.0122% | 0.0120% | — | — |
 | 2026-05 | 0.0422% | 2.6944% | 0.0278% | 0.0123% | 0.0506% | 0.0127% | — | — |
 
-# APEC on Its Own: A Real Decline Over Time
+# APEC: Decline Over Time
 
 - Looking at APEC by itself, not compared to other categories, its reactivation rate declines materially over the 17-month window: pooled at **0.0253%** across the first 10 months (January-October 2025) versus **0.0122%** across the final 7 (November 2025-May 2026) — roughly a **2.1x drop**.
 - This isn't simply a shrinking-audience artifact: APEC's own send volume dropped sharply starting November 2025 (from roughly 875,000-958,000 clients/month down to about 198,000-203,000), but the one month volume unexpectedly recovered to its earlier size — March 2026, back up to 955,586 clients — still shows the same lower rate (0.0137%) as the surrounding low-volume months, not a reversion to the earlier ~0.02-0.04% range.
-- That rules out "smaller reach makes the rate noisier" as the explanation, but this analysis doesn't have visibility into what actually changed in APEC's targeting, content, or embedding-refresh cadence around that time — worth a direct question to whoever owns APEC's campaign configuration.
-- Whatever the specific cause, the practical takeaway holds either way: APEC's already-modest reactivation rate is not stable or improving over the window — it's meaningfully lower in the second half than the first.
+- Noisy small samples from reduced reach don't explain the decrease either: the decline was already underway before the November 2025 volume drop — October 2025's rate (0.0083%) was already one of the lowest points in the first ten months.
+- Whatever the specific cause, the practical takeaway holds either way: APEC's already-modest reactivation rate is not stable or improving over the window — it's degrading over time.
 
 APEC monthly send volume and reactivation rate, standalone (chart-ready data):
 
