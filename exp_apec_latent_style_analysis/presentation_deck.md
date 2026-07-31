@@ -104,19 +104,21 @@ Monthly reactivation rate, APEC vs. non-APEC (chart-ready data):
 # How Other Campaign Types Compare
 
 - Beyond the APEC-vs-everything split, sends break down into four other categories by campaign name: general marketing content (OTHER), Dynamic Shoppable Email (DSE), Freestyle Lifecycle Series (FLS — triggered by specific high-intent events like cart abandonment or a saved item going on sale), and transactional/account-service email (excluded from the Part 1 comparison but shown here for transparency).
-- Compared against the other genuine marketing categories, APEC's 0.19% reactivation rate sits just below OTHER's 0.20%, further below DSE's 0.26%, and well below FLS's 0.39%.
-- FLS's higher rate is consistent with how it's triggered — only after a client already shows high purchase intent — a fundamentally different targeting mechanism than APEC's broad-based personalization, so this isn't a like-for-like read on campaign quality.
+- Across the full window, APEC's reactivation rate (0.19%) sits close to OTHER's (0.20%), below DSE's (0.26%), and well below FLS's (0.39%) — but that ordering partly reflects how often each category resends to the same clients. Normalizing to a per-month basis (client-months sent, not just distinct clients ever sent) flips DSE and OTHER: DSE resends to its base far more often, so per month sent, OTHER (0.03%) modestly edges out DSE (0.02%), which lands about even with APEC (0.02%).
+- FLS leads on both views — full window and per month — consistent with how it's triggered: only after a client already shows high purchase intent, a fundamentally different targeting mechanism than APEC's broad-based personalization, so this isn't a like-for-like read on campaign quality.
 - DSE and FLS are each a distinct, confirmed campaign program, not a naming-convention guess — DSE dynamically assembles shoppable product content, and FLS is behaviorally triggered — but neither uses APEC's CTSM-embedding-driven personalization, so their results are descriptive context, not proof of what personalization does or doesn't do.
 
-Reactivation rate by category, full window (chart-ready data):
+Reactivation rate by category, full window and per month sent (chart-ready data):
 
-| Category | Clients sent | Reactivated | Reactivation rate |
-|---|---|---|---|
-| OTHER | 4,295,781 | 8,417 | 0.1959% |
-| DSE | 1,846,336 | 4,740 | 0.2567% |
-| APEC | 1,355,921 | 2,591 | 0.1911% |
-| TRANSACTIONAL | 586,498 | 43,695 | 7.4502% |
-| FLS | 36,294 | 142 | 0.3912% |
+| Category | Clients sent (full window) | Reactivated (full window) | Reactivation rate (full window) | Client-months sent | Reactivated (month-sum) | Reactivation rate (per month sent) |
+|---|---|---|---|---|---|---|
+| OTHER | 4,295,781 | 8,417 | 0.1959% | 25,458,014 | 8,458 | 0.0332% |
+| DSE | 1,846,336 | 4,740 | 0.2567% | 19,901,339 | 4,752 | 0.0239% |
+| APEC | 1,355,921 | 2,591 | 0.1911% | 11,088,071 | 2,601 | 0.0235% |
+| TRANSACTIONAL | 586,498 | 43,695 | 7.4502% | 717,086 | 43,963 | 6.1308% |
+| FLS | 36,294 | 142 | 0.3912% | 64,221 | 144 | 0.2242% |
+
+Column notes: the "full window" columns count each client once, however many months they were sent or reactivated. "Client-months sent" and "Reactivated (month-sum)" count a client once per month they were sent or reactivated, so "Reactivation rate (per month sent)" reflects the odds in a typical month rather than cumulative odds across the full 17-month window.
 
 # Category Performance Over Time
 
