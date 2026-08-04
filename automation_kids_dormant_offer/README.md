@@ -17,6 +17,8 @@ offer**, writes it to the warehouse, exports CSV(s), and posts them to Slack
 | `2_load_data_and_create_csv.ipynb` | Reads the partition back, writes `dormant_kids_offer_<as_of>_<n>.csv` (500k-row batches) into `output_files/`. |
 | `run_dormant_kids.py` | Orchestrator: gates to once/month, preflights creds, runs both notebooks, uploads CSV(s) to Slack with the team message. |
 | `com.stitchfix.dormant-kids.plist` | macOS LaunchAgent that runs the orchestrator daily at **12:00**. |
+| `run_dormant_kids_watchdog.py` | Watchdog: checks that today's `run_<date>.log` exists; if the main job's trigger silently didn't fire, reloads its LaunchAgent and re-invokes it directly. |
+| `com.stitchfix.dormant-kids-watchdog.plist` | Independent macOS LaunchAgent that runs the watchdog daily at **15:00** (3h buffer after the main job). |
 | `output_files/` | Generated CSV(s) land here (git-ignored). |
 | `.automation/` | State markers, logs, generated scripts, cached channel ID (git-ignored). |
 
@@ -38,6 +40,16 @@ offer**, writes it to the warehouse, exports CSV(s), and posts them to Slack
   added automatically.
 - **Failure notice:** if creds are invalid or the run errors, it posts a Slack alert
   and does **not** write the month marker, so it retries the following day.
+- **Watchdog:** the retries above only help if the main job's launchd trigger
+  actually fires. On 2026-08 it didn't — a boot-time launchd registration
+  glitch left the job silently wedged (`EX_CONFIG`) for weeks with no log and
+  no Slack alert, since the script never got invoked at all. A second,
+  independently-registered LaunchAgent (`com.stitchfix.dormant-kids-watchdog.plist`,
+  fires daily at 15:00) checks whether today's `run_<date>.log` exists; if not,
+  it reloads the main LaunchAgent and re-invokes `run_dormant_kids.py` directly,
+  posting a Slack notice only when it has to step in. It's a separate `Label`
+  so the same registration glitch doesn't necessarily wedge both jobs at once —
+  but both still depend on this one laptop being logged in and awake.
 
 ## One-time setup
 
@@ -50,11 +62,14 @@ offer**, writes it to the warehouse, exports CSV(s), and posts them to Slack
    resolving the channel by name also needs **`channels:read`** (or set `SLACK_CHANNEL`
    in `run_dormant_kids.py` to the channel ID directly to skip that).
 
-2. **Install the LaunchAgent:**
+2. **Install the LaunchAgent (main job + watchdog):**
    ```bash
    cp com.stitchfix.dormant-kids.plist ~/Library/LaunchAgents/
-   launchctl unload ~/Library/LaunchAgents/com.stitchfix.dormant-kids.plist 2>/dev/null
-   launchctl load   ~/Library/LaunchAgents/com.stitchfix.dormant-kids.plist
+   cp com.stitchfix.dormant-kids-watchdog.plist ~/Library/LaunchAgents/
+   for label in com.stitchfix.dormant-kids com.stitchfix.dormant-kids-watchdog; do
+     launchctl unload ~/Library/LaunchAgents/$label.plist 2>/dev/null
+     launchctl load   ~/Library/LaunchAgents/$label.plist
+   done
    ```
 
 ## Test it
@@ -71,9 +86,16 @@ Watch `.automation/logs/run_<date>.log`. A successful run posts the CSV(s) to
 
 - **Re-deliver this month:** delete `.automation/delivered_YYYY-MM.done` and run again
   (or wait for the next noon fire).
-- **Logs:** `.automation/logs/` (per-day run logs + `launchd.{out,err}.log`).
-- **Disable:** `launchctl unload ~/Library/LaunchAgents/com.stitchfix.dormant-kids.plist`.
-- **Change run time:** edit `StartCalendarInterval` in the plist, then unload + load.
+- **Logs:** `.automation/logs/` — per-day `run_<date>.log` / `watchdog_<date>.log`,
+  plus `launchd.{out,err}.log` / `watchdog_launchd.{out,err}.log`.
+- **Disable:** `launchctl unload ~/Library/LaunchAgents/com.stitchfix.dormant-kids.plist`
+  (and `...-watchdog.plist` if you want the watchdog off too).
+- **Change run time:** edit `StartCalendarInterval` in the relevant plist, then unload + load.
+- **If the main job goes silently stuck again** (no `run_<date>.log` for today,
+  `launchctl print gui/<uid>/com.stitchfix.dormant-kids` shows a stale
+  `last exit code`): the watchdog should self-heal it by 15:00. To check by hand,
+  `launchctl unload` then `load` the main plist — that alone cleared the 2026-08
+  incident.
 
 ## Data handling
 
