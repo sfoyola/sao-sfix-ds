@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.stitchfix.dormant-kids-watchdog</string>
+
+    <!-- Independent job from com.stitchfix.dormant-kids: a separate launchd
+         Label means a boot-time registration glitch that wedges the main
+         job doesn't necessarily also wedge this check. -->
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/sergio.oyola/.pyenv/shims/python</string>
+        <string>/Users/sergio.oyola/Desktop/StitchFix/sao-sfix-ds/automation_kids_dormant_offer/run_dormant_kids_watchdog.py</string>
+    </array>
+
+    <!-- Fires at 15:00, three hours after the main job's noon schedule —
+         enough buffer to cover the "asleep at noon, runs on next wake"
+         catch-up case before concluding the main job is actually stuck. -->
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>15</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>HOME</key>
+        <string>/Users/sergio.oyola</string>
+        <key>PATH</key>
+        <string>/Users/sergio.oyola/.pyenv/shims:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>StandardOutPath</key>
+    <string>/Users/sergio.oyola/Desktop/StitchFix/sao-sfix-ds/automation_kids_dormant_offer/.automation/logs/watchdog_launchd.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/sergio.oyola/Desktop/StitchFix/sao-sfix-ds/automation_kids_dormant_offer/.automation/logs/watchdog_launchd.err.log</string>
+</dict>
+</plist>
