@@ -18,7 +18,7 @@ offer**, writes it to the warehouse, exports CSV(s), and posts them to Slack
 | `run_dormant_kids.py` | Orchestrator: gates to once/month, preflights creds, runs both notebooks, uploads CSV(s) to Slack with the team message. |
 | `com.stitchfix.dormant-kids.plist` | macOS LaunchAgent that runs the orchestrator daily at **12:00**. |
 | `run_dormant_kids_watchdog.py` | Watchdog: checks that today's `run_<date>.log` exists; if the main job's trigger silently didn't fire, reloads its LaunchAgent and re-invokes it directly. |
-| `com.stitchfix.dormant-kids-watchdog.plist` | Independent macOS LaunchAgent that runs the watchdog daily at **15:00** (3h buffer after the main job). |
+| `com.stitchfix.dormant-kids-watchdog.plist` | Independent macOS LaunchAgent that runs the watchdog daily at **14:00** (2h buffer after the main job). |
 | `output_files/` | Generated CSV(s) land here (git-ignored). |
 | `.automation/` | State markers, logs, generated scripts, cached channel ID (git-ignored). |
 
@@ -45,7 +45,7 @@ offer**, writes it to the warehouse, exports CSV(s), and posts them to Slack
   glitch left the job silently wedged (`EX_CONFIG`) for weeks with no log and
   no Slack alert, since the script never got invoked at all. A second,
   independently-registered LaunchAgent (`com.stitchfix.dormant-kids-watchdog.plist`,
-  fires daily at 15:00) checks whether today's `run_<date>.log` exists; if not,
+  fires daily at 14:00) checks whether today's `run_<date>.log` exists; if not,
   it reloads the main LaunchAgent and re-invokes `run_dormant_kids.py` directly,
   posting a Slack notice only when it has to step in. It's a separate `Label`
   so the same registration glitch doesn't necessarily wedge both jobs at once —
@@ -93,7 +93,7 @@ Watch `.automation/logs/run_<date>.log`. A successful run posts the CSV(s) to
 - **Change run time:** edit `StartCalendarInterval` in the relevant plist, then unload + load.
 - **If the main job goes silently stuck again** (no `run_<date>.log` for today,
   `launchctl print gui/<uid>/com.stitchfix.dormant-kids` shows a stale
-  `last exit code`): the watchdog should self-heal it by 15:00. To check by hand,
+  `last exit code`): the watchdog should self-heal it by 14:00. To check by hand,
   `launchctl unload` then `load` the main plist — that alone cleared the 2026-08
   incident.
 

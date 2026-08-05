@@ -14,13 +14,13 @@
         <string>/Users/sergio.oyola/Desktop/StitchFix/sao-sfix-ds/automation_kids_dormant_offer/run_dormant_kids_watchdog.py</string>
     </array>
 
-    <!-- Fires at 15:00, three hours after the main job's noon schedule —
+    <!-- Fires at 14:00, two hours after the main job's noon schedule —
          enough buffer to cover the "asleep at noon, runs on next wake"
          catch-up case before concluding the main job is actually stuck. -->
     <key>StartCalendarInterval</key>
     <dict>
         <key>Hour</key>
-        <integer>15</integer>
+        <integer>14</integer>
         <key>Minute</key>
         <integer>0</integer>
     </dict>
