@@ -20,7 +20,9 @@ invocation). When that's detected, the watchdog:
 
 The re-invoked script posts its own Slack success/failure/creds-alert
 messages as usual; this watchdog only posts a message when it had to
-step in, so the channel stays quiet on normal days.
+step in, so the channel stays quiet on normal days. It also no-ops
+entirely once the month's delivered_YYYY-MM.done marker exists — a
+stuck trigger doesn't matter once there's nothing left to deliver.
 """
 
 import os
@@ -41,7 +43,9 @@ LOG_DIR = STATE_DIR / "logs"
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 TODAY = date.today().isoformat()
+MONTH = TODAY[:7]
 MAIN_LOG = LOG_DIR / f"run_{TODAY}.log"          # written by run_dormant_kids.py as its first action
+SUCCESS_MARKER = STATE_DIR / f"delivered_{MONTH}.done"  # same marker run_dormant_kids.py writes on success
 
 _logfh = open(LOG_DIR / f"watchdog_{TODAY}.log", "a", buffering=1)
 
@@ -83,6 +87,10 @@ def slack_alert(text):
 
 def main():
     log(f"=== watchdog check  today={TODAY} ===")
+
+    if SUCCESS_MARKER.exists():
+        log(f"{MONTH} already delivered — nothing to do regardless of today's trigger.")
+        return 0
 
     if MAIN_LOG.exists():
         log("Main job already logged activity today — nothing to do.")
