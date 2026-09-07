@@ -2,6 +2,7 @@
 
 - The analysis-side eligibility query identifies the client population intended for allocation into the Autoship Nudge Promo Incentive test. The table below lists every filtering criterion the query applies, one row per field.
 - Randomization unit: `client_id`. Allocation point: once a client completes First Fix checkout, keep rate is known, and they select a Quick Fix date and click "Schedule a Quick Fix."
+- The "Schedule a Quick Fix" click itself is directly observable in `curated.product_tracking_events`, giving a client-level signal for who actually reached the allocation trigger versus who merely qualified for it. Measured against the qualifying population above, the observed click-through (reach) rate is **~38-41%** (2026-07 and 2026-08 reference months); this event has sustained volume back to 2025-07, so earlier reference months are measurable too.
 
 | Table | Field | Logic | Purpose |
 |---|---|---|---|
@@ -11,6 +12,7 @@
 | `curated.checkout_based_client_state_journal` | `client_state_detail` | `= 'Never Active'` as of the journal row covering First Fix checkout | Confirms the client is genuinely new, not a reactivated or previously dormant/lapsed client |
 | `curated.client` | `fake_client_flag` | `COALESCE(fake_client_flag, 0) = 0` | Excludes fraudulent accounts |
 | `curated.client` | `employee_affiliated_flag` | `COALESCE(employee_affiliated_flag, 0) = 0` | Excludes employee-affiliated accounts |
+| `curated.product_tracking_events` | `name`, `action_name`, `screen_view_name` | `name = 'schedule_quick_fix_button' AND action_name = 'schedule_quick_fix' AND screen_view_name = 'post_checkout_promo'`, joined on `event_timestamp >= checkout_date` | Confirms the client actually clicked "Schedule a Quick Fix" (the allocation trigger), not just that they qualified for it |
 
 **Query logic (verbatim, `eligible` CTE):**
 ```sql
@@ -43,3 +45,18 @@ eligible AS (
       AND s.client_state_detail = 'Never Active'
 )
 ```
+
+**Reach-rate logic (verbatim, `reached` CTE):**
+```sql
+reached AS (
+    SELECT DISTINCT e.client_id
+    FROM eligible e
+    JOIN curated.product_tracking_events t
+      ON t.client_id = e.client_id
+     AND t.name = 'schedule_quick_fix_button'
+     AND t.action_name = 'schedule_quick_fix'
+     AND t.screen_view_name = 'post_checkout_promo'
+     AND t.event_timestamp >= CAST(e.checkout_date AS TIMESTAMP)
+)
+```
+This event has sustained monthly volume back to 2025-07, well before any reference month used in this analysis.
